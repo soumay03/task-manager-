@@ -1,5 +1,6 @@
 package com.Terminator.taskmanager.service;
 
+import com.Terminator.taskmanager.dto.*;
 import com.Terminator.taskmanager.entity.User;
 import com.Terminator.taskmanager.repository.*;
 import org.springframework.beans.factory.annotation.*;
@@ -12,14 +13,26 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
-    
-    public User register(User user)
-    {
-        if(userRepository.existsByEmail(user.getEmail()))
-        {
+
+    public UserResponseDTO register(UserRequestDTO request) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
-        return userRepository.save(user);
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .build();
+
+        User savedUser = userRepository.save(user);
+
+        return new UserResponseDTO(
+                savedUser.getId(),
+                savedUser.getName(),
+                savedUser.getEmail()
+        );
     }
 
     public List<User> getAllUsers()

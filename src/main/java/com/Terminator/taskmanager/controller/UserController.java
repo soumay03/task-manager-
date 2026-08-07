@@ -1,6 +1,8 @@
 package com.Terminator.taskmanager.controller;
 
 
+import com.Terminator.taskmanager.dto.UserRequestDTO;
+import com.Terminator.taskmanager.dto.UserResponseDTO;
 import com.Terminator.taskmanager.entity.User;
 import com.Terminator.taskmanager.service.UserService;
 import jakarta.validation.*;
@@ -20,9 +22,9 @@ public class UserController {
     }
 
     @PostMapping
-    public User register(@Valid @RequestBody User user)
+    public UserResponseDTO register(@Valid @RequestBody UserRequestDTO request)
     {
-        return userService.register(user);
+        return userService.register(request);
     }
 
     @GetMapping
